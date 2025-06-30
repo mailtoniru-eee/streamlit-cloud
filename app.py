@@ -19,7 +19,7 @@ supabase: Client = init_supabase()
 
 @st.cache_data
 def get_data():
-    response = supabase.table("your_table").select("*").execute()
+    response = supabase.table("rag_metrics").select("*").execute()
     return pd.DataFrame(response.data)
 
 st.title("Interactive Dashboard Example with Supabase")
@@ -27,9 +27,9 @@ st.title("Interactive Dashboard Example with Supabase")
 df = get_data()
 
 if not df.empty:
-    unique_values = df["some_column"].unique()
+    unique_values = df["aggregate_id"].unique()
     selected_value = st.selectbox("Select value", unique_values)
-    filtered_df = df[df["some_column"] == selected_value]
+    filtered_df = df[df["aggregate_id"] == selected_value]
     st.dataframe(filtered_df)
 else:
     st.write("No data found.")
