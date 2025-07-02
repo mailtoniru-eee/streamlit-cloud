@@ -2,6 +2,12 @@ import streamlit as st
 from supabase import create_client, Client
 import pandas as pd
 import os
+import requests
+from PIL import Image
+from io import BytesIO
+
+# set iith url
+url = "https://en.wikipedia.org/wiki/International_Institute_of_Information_Technology,_Hyderabad#/media/File:International_Institute_of_Information_Technology,_Hyderabad_logo.png"
 
 # Read credentials from environment variables
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
@@ -22,7 +28,10 @@ def get_data():
     response = supabase.table("rag_metrics").select("*").execute()
     return pd.DataFrame(response.data)
 
-st.title("Interactive Dashboard Example with Supabase")
+st.title("Group 23 - RAG Application - RAGBench Dataset")
+response = requests.get(url)
+image = Image.open(BytesIO(response.content))
+st.image(image, caption="IIITH", use_column_width=True)
 
 df = get_data()
 
