@@ -6,9 +6,7 @@ import requests
 from PIL import Image
 from io import BytesIO
 
-# set iith url
-url = "https://en.wikipedia.org/wiki/International_Institute_of_Information_Technology,_Hyderabad#/media/File:International_Institute_of_Information_Technology,_Hyderabad_logo.png"
-
+image = Image.open(logo/International_Institute_of_Information_Technology,_Hyderabad_logo.png)
 # Read credentials from environment variables
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
@@ -29,7 +27,6 @@ def get_data():
     return pd.DataFrame(response.data)
 
 st.title("Group 23 - RAG Application - RAGBench Dataset")
-response = requests.get(url)
 image = Image.open(BytesIO(response.content))
 st.image(image, caption="IIITH", use_column_width=True)
 
