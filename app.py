@@ -114,4 +114,40 @@ with tab1:
     st.altair_chart(chart, use_container_width=True)
 
 with tab2:
-    st.header("Image Viewer")
+    st.header("📊 Metric Averages (One Chart per Metric)")
+    # Metrics to visualize
+    metrics = [
+        "context_relevance",
+        "context_utilization",
+        "adherence",
+        "completeness",
+        "hallucination_auroc",
+        "relevance_rmse",
+        "utilization_rmse"
+    ]
+    
+    # Compute average by aggregate_id
+    agg_df = (
+        filtered_df.groupby("aggregate_id")[metrics]
+        .mean()
+        .reset_index()
+    )
+    
+    # Replace aggregate_id with friendly index labels for x-axis
+    agg_df["Run"] = ["Run " + str(i + 1) for i in range(len(agg_df))]
+
+    for metric in metrics:
+        chart_df = agg_df[["Run", metric]]
+        st.markdown(f"### {metric.replace('_', ' ').title()}")
+    
+        chart = (
+            alt.Chart(chart_df)
+            .mark_bar(color="#1f77b4")
+            .encode(
+                x=alt.X("Run:N", title=None),
+                y=alt.Y(f"{metric}:Q", title="Average Value"),
+                tooltip=["Run", metric]
+            )
+            .properties(height=300)
+        )
+        st.altair_chart(chart, use_container_width=True)
