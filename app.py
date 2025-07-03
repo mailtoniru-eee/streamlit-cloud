@@ -6,7 +6,7 @@ import requests
 from PIL import Image
 from io import BytesIO
 
-image = Image.open(logo/International_Institute_of_Information_Technology,_Hyderabad_logo.png)
+image = Image.open("logo/iiith.png")
 # Read credentials from environment variables
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
