@@ -117,16 +117,16 @@ with tab2:
 
     filtered_df = df.copy()
 
-    if vector_dbs:
+    if vector_db:
         filtered_df = filtered_df[filtered_df["vector_db"].isin(vector_dbs)]
     
-    if reranking_models:
+    if reranking_model:
         filtered_df = filtered_df[filtered_df["reranking_model"].isin(reranking_models)]
     
-    if repacking_strategies:
+    if repacking_strategy:
         filtered_df = filtered_df[filtered_df["repacking_strategy"].isin(repacking_strategies)]
     
-    if summarization_models:
+    if summarization_model:
         filtered_df = filtered_df[filtered_df["summarization_model"].isin(summarization_models)]
 
     group_fields = [
