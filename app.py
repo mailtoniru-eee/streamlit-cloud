@@ -35,10 +35,20 @@ st.markdown("</div>", unsafe_allow_html=True)
 
 df = get_data()
 
-if not df.empty:
-    unique_values = df["aggregate_id"].unique()
-    selected_value = st.selectbox("Select value", unique_values)
-    filtered_df = df[df["aggregate_id"] == selected_value]
-    st.dataframe(filtered_df)
-else:
-    st.write("No data found.")
+tab1, tab2 = st.tabs(["📊 Dashboard", "🖼️ Image Viewer"])
+
+with tab1:
+    st.header("Analytics Dashboard")
+    st.line_chart([1, 5, 2, 6])
+
+with tab2:
+    st.header("Image Viewer")
+    st.image("logos/sample.png", width=300)
+
+# if not df.empty:
+#     unique_values = df["aggregate_id"].unique()
+#     selected_value = st.selectbox("Select value", unique_values)
+#     filtered_df = df[df["aggregate_id"] == selected_value]
+#     st.dataframe(filtered_df)
+# else:
+#     st.write("No data found.")
