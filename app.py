@@ -26,8 +26,8 @@ def get_data():
     response = supabase.table("rag_metrics").select("*").execute()
     return pd.DataFrame(response.data)
 
-st.title("Group 23 - RAG Application - RAGBench Dataset")
-st.image(image, caption="IIITH", use_column_width=True)
+st.header("Group 23 - RAG Application - RAGBench Dataset")
+st.image(image, caption="IIITH", width=300)
 
 df = get_data()
 
