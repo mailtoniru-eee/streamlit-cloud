@@ -117,9 +117,6 @@ with tab2:
 
     filtered_df = df.copy()
 
-    if input_datasets:
-        filtered_df = filtered_df[filtered_df["input_dataset"].isin(input_datasets)]
-
     if vector_dbs:
         filtered_df = filtered_df[filtered_df["vector_db"].isin(vector_dbs)]
     
