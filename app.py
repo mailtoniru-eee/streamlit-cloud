@@ -44,11 +44,3 @@ with tab1:
 with tab2:
     st.header("Image Viewer")
     st.image("logos/sample.png", width=300)
-
-# if not df.empty:
-#     unique_values = df["aggregate_id"].unique()
-#     selected_value = st.selectbox("Select value", unique_values)
-#     filtered_df = df[df["aggregate_id"] == selected_value]
-#     st.dataframe(filtered_df)
-# else:
-#     st.write("No data found.")
