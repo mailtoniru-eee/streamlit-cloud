@@ -52,11 +52,12 @@ with col2:
 tab1, tab2 = st.tabs(["📊 Dashboard", "🖼️ Image Viewer"])
 
 with tab1:
+    df1 = df.copy()
     # Slicers
-    input_dataset = st.sidebar.selectbox("Dataset", sorted(df["input_dataset"].dropna().unique()))
+    input_dataset = st.sidebar.selectbox("Dataset", sorted(df1["input_dataset"].dropna().unique()))
     
     # Apply top-level filter
-    filtered_df = df[df["input_dataset"] == input_dataset]
+    filtered_df = df1[df1["input_dataset"] == input_dataset]
     
     # Second-level slicers
     vector_db = st.selectbox("Vector DB", sorted(filtered_df["vector_db"].dropna().unique()))
@@ -109,24 +110,25 @@ with tab1:
     st.altair_chart(chart, use_container_width=True)
     
 with tab2:
+    df2 = df.copy()
     st.header("📊 Metric Averages (One Chart per Metric)")
-    vector_db = st.multiselect("Vector DB", filtered_df["vector_db"].dropna().unique(), default=None)
-    reranking_model = st.multiselect("Reranking Model", filtered_df["reranking_model"].dropna().unique(), default=None)
-    repacking_strategy = st.multiselect("Repacking Strategy", filtered_df["repacking_strategy"].dropna().unique(), default=None)
-    summarization_model = st.multiselect("Summarization Model", filtered_df["summarization_model"].dropna().unique(), default=None)
+    vector_dbs = st.multiselect("Vector DB", filtered_df["vector_db"].dropna().unique(), default=None)
+    reranking_models = st.multiselect("Reranking Model", filtered_df["reranking_model"].dropna().unique(), default=None)
+    repacking_strategys = st.multiselect("Repacking Strategy", filtered_df["repacking_strategy"].dropna().unique(), default=None)
+    summarization_models = st.multiselect("Summarization Model", filtered_df["summarization_model"].dropna().unique(), default=None)
 
     filtered_df = df.copy()
 
-    if vector_db:
+    if vector_dbs:
         filtered_df = filtered_df[filtered_df["vector_db"].isin(vector_dbs)]
     
-    if reranking_model:
+    if reranking_models:
         filtered_df = filtered_df[filtered_df["reranking_model"].isin(reranking_models)]
     
-    if repacking_strategy:
+    if repacking_strategys:
         filtered_df = filtered_df[filtered_df["repacking_strategy"].isin(repacking_strategies)]
     
-    if summarization_model:
+    if summarization_models:
         filtered_df = filtered_df[filtered_df["summarization_model"].isin(summarization_models)]
 
     group_fields = [
