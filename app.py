@@ -6,7 +6,7 @@ import requests
 from PIL import Image
 from io import BytesIO
 
-image = Image.open("logo/iiith.png")
+image = Image.open("logo/iith.jpg")
 # Read credentials from environment variables
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
@@ -26,8 +26,8 @@ def get_data():
     response = supabase.table("rag_metrics").select("*").execute()
     return pd.DataFrame(response.data)
 
-st.header("Group 23 - RAG Application - RAGBench Dataset")
-st.image(image, caption="IIITH", width=300)
+#st.header("Group 23 - RAG Application - RAGBench Dataset")
+st.image(image, caption="Group 23 - RAG Application - RAGBench Dataset", width=300)
 
 df = get_data()
 
