@@ -53,7 +53,7 @@ tab1, tab2 = st.tabs(["📊 Dashboard", "🖼️ Image Viewer"])
 
 with tab1:
     # Slicers
-    st.sidebar.header("🔍 Single Select Filters")
+    st.header("🔍 Single Select Filters")
     
     input_dataset = st.sidebar.selectbox("Dataset", sorted(df["input_dataset"].dropna().unique()))
     
@@ -61,10 +61,10 @@ with tab1:
     filtered_df = df[df["input_dataset"] == input_dataset]
     
     # Second-level slicers
-    vector_db = st.sidebar.selectbox("Vector DB", sorted(filtered_df["vector_db"].dropna().unique()))
-    reranking_model = st.sidebar.selectbox("Reranking Model", sorted(filtered_df["reranking_model"].dropna().unique()))
-    repacking_strategy = st.sidebar.selectbox("Repacking Strategy", sorted(filtered_df["repacking_strategy"].dropna().unique()))
-    summarization_model = st.sidebar.selectbox("Summarization Model", sorted(filtered_df["summarization_model"].dropna().unique()))
+    vector_db = st.selectbox("Vector DB", sorted(filtered_df["vector_db"].dropna().unique()))
+    reranking_model = st.selectbox("Reranking Model", sorted(filtered_df["reranking_model"].dropna().unique()))
+    repacking_strategy = st.selectbox("Repacking Strategy", sorted(filtered_df["repacking_strategy"].dropna().unique()))
+    summarization_model = st.selectbox("Summarization Model", sorted(filtered_df["summarization_model"].dropna().unique()))
     
     # Apply all filters
     filtered_df = filtered_df[
@@ -112,9 +112,9 @@ with tab1:
     
 with tab2:
     st.header("📊 Metric Averages (One Chart per Metric)")
-    st.sidebar.header("🔍 Multi Select Filters")
-    vector_db = st.sidebar.multiselect("Vector DB", sorted(filtered_df["vector_db"].dropna().unique()))
-    reranking_model = st.sidebar.multiselect("Reranking Model", sorted(filtered_df["reranking_model"].dropna().unique()))
-    repacking_strategy = st.sidebar.multiselect("Repacking Strategy", sorted(filtered_df["repacking_strategy"].dropna().unique()))
-    summarization_model = st.sidebar.multiselect("Summarization Model", sorted(filtered_df["summarization_model"].dropna().unique()))
+    st.header("🔍 Multi Select Filters")
+    vector_db = st.multiselect("Vector DB", sorted(filtered_df["vector_db"].dropna().unique()))
+    reranking_model = st.multiselect("Reranking Model", sorted(filtered_df["reranking_model"].dropna().unique()))
+    repacking_strategy = st.multiselect("Repacking Strategy", sorted(filtered_df["repacking_strategy"].dropna().unique()))
+    summarization_model = st.multiselect("Summarization Model", sorted(filtered_df["summarization_model"].dropna().unique()))
     
