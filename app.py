@@ -43,4 +43,3 @@ with tab1:
 
 with tab2:
     st.header("Image Viewer")
-    st.image("logos/sample.png", width=300)
