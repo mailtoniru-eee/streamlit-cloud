@@ -27,11 +27,9 @@ def get_data():
     return pd.DataFrame(response.data)
 
 #st.header("Group 23 - RAG Application - RAGBench Dataset")
-st.markdown(    
-    "<div style='background-color: white; padding: 20px; text-align: center;'>",
-    unsafe_allow_html=True
-)
-st.image(image, caption="Group 23 - RAG Application - RAGBench Dataset", width=300)
+col1, col2, col3 = st.columns([1, 2, 1])  # Center column is wider
+with col2:
+    st.image(image, caption="Group 23 - RAG Application - RAGBench Dataset", width=300)
 st.markdown("</div>", unsafe_allow_html=True)
 
 
