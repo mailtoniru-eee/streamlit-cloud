@@ -111,13 +111,14 @@ with tab1:
     
 with tab2:
     df2 = df.copy()
+    
     st.header("📊 Metric Averages (One Chart per Metric)")
-    vector_dbs = st.multiselect("Vector DB", filtered_df["vector_db"].dropna().unique(), default=None)
-    reranking_models = st.multiselect("Reranking Model", filtered_df["reranking_model"].dropna().unique(), default=None)
-    repacking_strategys = st.multiselect("Repacking Strategy", filtered_df["repacking_strategy"].dropna().unique(), default=None)
-    summarization_models = st.multiselect("Summarization Model", filtered_df["summarization_model"].dropna().unique(), default=None)
+    vector_dbs = st.multiselect("Vector DB", df2["vector_db"].dropna().unique(), default=None)
+    reranking_models = st.multiselect("Reranking Model", df2["reranking_model"].dropna().unique(), default=None)
+    repacking_strategys = st.multiselect("Repacking Strategy", df2["repacking_strategy"].dropna().unique(), default=None)
+    summarization_models = st.multiselect("Summarization Model", df2["summarization_model"].dropna().unique(), default=None)
 
-    filtered_df = df.copy()
+    filtered_df = df2.copy()
 
     if vector_dbs:
         filtered_df = filtered_df[filtered_df["vector_db"].isin(vector_dbs)]
