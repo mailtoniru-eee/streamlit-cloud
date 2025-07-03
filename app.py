@@ -6,6 +6,7 @@ import os
 import requests
 from PIL import Image
 from io import BytesIO
+import json
 
 image = Image.open("logo/iith.jpg")
 # Read credentials from environment variables
@@ -45,7 +46,17 @@ with tab1:
     
     # Flatten the 'input_variable' JSON column
     input_vars_df = pd.json_normalize(df["input_variable"])
-    df = df.drop(columns=["input_variable"]).join(input_vars_df)
+
+    def extract_first(dataset):
+        if isinstance(dataset, list) and len(dataset) > 0:
+            return dataset[0]
+        return dataset  # fallback
+
+    input_vars_df["input_dataset"] = input_vars_df["input_dataset"].apply(extract_first)
+    
+    df = df.drop(columns=["input_variable"]).reset_index(drop=True)
+    input_vars_df = input_vars_df.reset_index(drop=True)
+    df = pd.concat([df, input_vars_df], axis=1)
     
     # Slicers
     st.sidebar.header("🔍 Filters")
