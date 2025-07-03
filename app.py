@@ -30,6 +30,41 @@ def get_data():
 
 df = get_data()
 
+input_vars_df = pd.json_normalize(df["input_variable"])
+
+def extract_first(dataset):
+    if isinstance(dataset, list) and len(dataset) > 0:
+        return dataset[0]
+    return dataset  # fallback
+
+input_vars_df["input_dataset"] = input_vars_df["input_dataset"].apply(extract_first)
+
+df = df.drop(columns=["input_variable"]).reset_index(drop=True)
+input_vars_df = input_vars_df.reset_index(drop=True)
+df = pd.concat([df, input_vars_df], axis=1)
+
+# Slicers
+st.sidebar.header("🔍 Filters")
+
+input_dataset = st.sidebar.selectbox("Dataset", sorted(df["input_dataset"].dropna().unique()))
+
+# Apply top-level filter
+filtered_df = df[df["input_dataset"] == input_dataset]
+
+# Second-level slicers
+vector_db = st.sidebar.selectbox("Vector DB", sorted(filtered_df["vector_db"].dropna().unique()))
+reranking_model = st.sidebar.selectbox("Reranking Model", sorted(filtered_df["reranking_model"].dropna().unique()))
+repacking_strategy = st.sidebar.selectbox("Repacking Strategy", sorted(filtered_df["repacking_strategy"].dropna().unique()))
+summarization_model = st.sidebar.selectbox("Summarization Model", sorted(filtered_df["summarization_model"].dropna().unique()))
+
+# Apply all filters
+filtered_df = filtered_df[
+    (filtered_df["vector_db"] == vector_db) &
+    (filtered_df["reranking_model"] == reranking_model) &
+    (filtered_df["repacking_strategy"] == repacking_strategy) &
+    (filtered_df["summarization_model"] == summarization_model)
+]
+
 st.subheader("Group 23 - RAG Application - RAGBench Dataset")
 col1, col2, col3 = st.columns([1, 2, 1])  # Center column is wider
 with col2:
@@ -39,83 +74,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 tab1, tab2 = st.tabs(["📊 Dashboard", "🖼️ Image Viewer"])
 
 with tab1:
-    st.header("Analytics Dashboard")
     
-    # Flatten the 'input_variable' JSON column
-    input_vars_df = pd.json_normalize(df["input_variable"])
-
-    def extract_first(dataset):
-        if isinstance(dataset, list) and len(dataset) > 0:
-            return dataset[0]
-        return dataset  # fallback
-
-    input_vars_df["input_dataset"] = input_vars_df["input_dataset"].apply(extract_first)
-    
-    df = df.drop(columns=["input_variable"]).reset_index(drop=True)
-    input_vars_df = input_vars_df.reset_index(drop=True)
-    df = pd.concat([df, input_vars_df], axis=1)
-    
-    # Slicers
-    st.sidebar.header("🔍 Filters")
-    
-    input_dataset = st.sidebar.selectbox("Dataset", sorted(df["input_dataset"].dropna().unique()))
-    
-    # Apply top-level filter
-    filtered_df = df[df["input_dataset"] == input_dataset]
-    
-    # Second-level slicers
-    vector_db = st.sidebar.selectbox("Vector DB", sorted(filtered_df["vector_db"].dropna().unique()))
-    reranking_model = st.sidebar.selectbox("Reranking Model", sorted(filtered_df["reranking_model"].dropna().unique()))
-    repacking_strategy = st.sidebar.selectbox("Repacking Strategy", sorted(filtered_df["repacking_strategy"].dropna().unique()))
-    summarization_model = st.sidebar.selectbox("Summarization Model", sorted(filtered_df["summarization_model"].dropna().unique()))
-    
-    # Apply all filters
-    filtered_df = filtered_df[
-        (filtered_df["vector_db"] == vector_db) &
-        (filtered_df["reranking_model"] == reranking_model) &
-        (filtered_df["repacking_strategy"] == repacking_strategy) &
-        (filtered_df["summarization_model"] == summarization_model)
-    ]
-    
-    # Metrics to plot
-    metrics = [
-        "context_relevance",
-        "context_utilization",
-        "adherence",
-        "completeness",
-        "hallucination_auroc",
-        "relevance_rmse",
-        "utilization_rmse"
-    ]
-    
-    # Compute average by aggregate_id
-    agg_df = (
-        filtered_df.groupby("aggregate_id")[metrics]
-        .mean()
-        .reset_index()
-        .melt(id_vars=["aggregate_id"], var_name="Metric", value_name="Average")
-    )
-    
-    # Bar chart
-    st.subheader("📊 Average Metrics by Aggregate ID")
-    
-    chart = (
-        alt.Chart(agg_df)
-        .mark_bar()
-        .encode(
-            x=alt.X("aggregate_id:N", title="Aggregate ID"),
-            y=alt.Y("Average:Q"),
-            color="Metric:N",
-            tooltip=["Metric", "Average", "aggregate_id"]
-        )
-        .properties(width=800, height=400)
-    )
-    
-    st.altair_chart(chart, use_container_width=True)
-
-with tab2:
-    st.header("📊 Metric Averages (One Chart per Metric)")
-    # Metrics to visualize
     metrics = [
         "context_relevance",
         "context_utilization",
@@ -151,3 +110,10 @@ with tab2:
             )
 
     st.altair_chart(chart, use_container_width=True)
+    
+    
+
+with tab2:
+    st.header("📊 Metric Averages (One Chart per Metric)")
+    # Metrics to visualize
+    
