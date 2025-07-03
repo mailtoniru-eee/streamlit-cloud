@@ -126,28 +126,28 @@ with tab2:
         "utilization_rmse"
     ]
     
-    # Compute average by aggregate_id
-    agg_df = (
-        filtered_df.groupby("aggregate_id")[metrics]
-        .mean()
-        .reset_index()
-    )
+    # 2. Compute average of each metric over the filtered rows
+    metric_averages = {metric: filtered_df[metric].mean() for metric in metrics}
     
-    # Replace aggregate_id with friendly index labels for x-axis
-    agg_df["Run"] = ["Run " + str(i + 1) for i in range(len(agg_df))]
+    # 3. Convert to DataFrame for Altair
+    avg_df = pd.DataFrame({
+        "Metric": list(metric_averages.keys()),
+        "Average": list(metric_averages.values())
+    })
 
-    for metric in metrics:
-        chart_df = agg_df[["Run", metric]]
-        st.markdown(f"### {metric.replace('_', ' ').title()}")
-    
-        chart = (
-            alt.Chart(chart_df)
-            .mark_bar(color="#1f77b4")
-            .encode(
-                x=alt.X("Run:N", title=None),
-                y=alt.Y(f"{metric}:Q", title="Average Value"),
-                tooltip=["Run", metric]
+    # 4. Plot one bar chart
+    st.subheader("📊 Metric Averages for Selected Configuration")
+
+    chart = (
+        alt.Chart(avg_df)
+        .mark_bar()
+        .encode(
+            x=alt.X("Metric:N", sort=None),
+            y=alt.Y("Average:Q"),
+            color=alt.Color("Metric:N", legend=None),
+            tooltip=["Metric", "Average"]
+                )
+                .properties(height=400)
             )
-            .properties(height=300)
-        )
-        st.altair_chart(chart, use_container_width=True)
+
+    st.altair_chart(chart, use_container_width=True)
