@@ -26,7 +26,7 @@ def get_data():
     response = supabase.table("rag_metrics").select("*").execute()
     return pd.DataFrame(response.data)
 
-#st.header("Group 23 - RAG Application - RAGBench Dataset")
+st.subheader("Group 23 - RAG Application - RAGBench Dataset")
 col1, col2, col3 = st.columns([1, 2, 1])  # Center column is wider
 with col2:
     st.image(image, caption="Group 23 - RAG Application - RAGBench Dataset", width=300)
