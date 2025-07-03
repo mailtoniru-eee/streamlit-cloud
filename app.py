@@ -27,7 +27,6 @@ def get_data():
     return pd.DataFrame(response.data)
 
 st.title("Group 23 - RAG Application - RAGBench Dataset")
-image = Image.open(BytesIO(response.content))
 st.image(image, caption="IIITH", use_column_width=True)
 
 df = get_data()
