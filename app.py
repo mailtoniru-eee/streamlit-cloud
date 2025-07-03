@@ -53,8 +53,6 @@ tab1, tab2 = st.tabs(["📊 Dashboard", "🖼️ Image Viewer"])
 
 with tab1:
     # Slicers
-    st.header("🔍 Single Select Filters")
-    
     input_dataset = st.sidebar.selectbox("Dataset", sorted(df["input_dataset"].dropna().unique()))
     
     # Apply top-level filter
@@ -112,9 +110,8 @@ with tab1:
     
 with tab2:
     st.header("📊 Metric Averages (One Chart per Metric)")
-    st.header("🔍 Multi Select Filters")
-    vector_db = st.multiselect("Vector DB", sorted(filtered_df["vector_db"].dropna().unique()))
-    reranking_model = st.multiselect("Reranking Model", sorted(filtered_df["reranking_model"].dropna().unique()))
-    repacking_strategy = st.multiselect("Repacking Strategy", sorted(filtered_df["repacking_strategy"].dropna().unique()))
-    summarization_model = st.multiselect("Summarization Model", sorted(filtered_df["summarization_model"].dropna().unique()))
+    vector_db = st.multiselect("Vector DB", filtered_df["vector_db"].dropna().unique(), default=None)
+    reranking_model = st.multiselect("Reranking Model", filtered_df["reranking_model"].dropna().unique(), default=None)
+    repacking_strategy = st.multiselect("Repacking Strategy", filtered_df["repacking_strategy"].dropna().unique(), default=None)
+    summarization_model = st.multiselect("Summarization Model", filtered_df["summarization_model"].dropna().unique(), default=None)
     
