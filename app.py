@@ -40,9 +40,6 @@ tab1, tab2 = st.tabs(["📊 Dashboard", "🖼️ Image Viewer"])
 
 with tab1:
     st.header("Analytics Dashboard")
-
-    st.write("input_variable column type example:", type(df["input_variable"].iloc[0]))
-    st.write("Sample input_variable value:", df["input_variable"].iloc[0])
     
     # Flatten the 'input_variable' JSON column
     input_vars_df = pd.json_normalize(df["input_variable"])
