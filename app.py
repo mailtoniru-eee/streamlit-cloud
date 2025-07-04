@@ -174,8 +174,8 @@ with tab2:
             tooltip=["config_label", "Metric", "Average"]
         )
         .properties(
-            width=3200,
-            height=3000
+            width=3000,
+            height=2000
             )
         )
     
