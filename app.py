@@ -169,3 +169,47 @@ with tab2:
     )
 
     st.altair_chart(chart, use_container_width=False)
+
+with tab3:
+    st.header("🏆 Best Configuration for Selected Dataset")
+
+    df3 = df[df["input_dataset"] == input_dataset]
+
+    group_fields = [
+        "vector_db", "reranking_model", "repacking_strategy", "summarization_model"
+    ]
+
+    metrics = [
+        "context_relevance", "context_utilization", "adherence", "completeness",
+        "hallucination_auroc", "relevance_rmse", "utilization_rmse"
+    ]
+
+    if df3.empty:
+        st.warning("No data available for the selected dataset.")
+    else:
+        # Group by config and compute mean of each metric
+        grouped = df3.groupby(group_fields)[metrics].mean().reset_index()
+
+        # Calculate a combined score (you can adjust weights if needed)
+        grouped["total_score"] = grouped[metrics].sum(axis=1)
+
+        # Get row(s) with max total score
+        best_configs = grouped.sort_values(by="total_score", ascending=False).head(3)
+
+        st.markdown("### 🥇 Top Configurations")
+        st.dataframe(best_configs.style.format(precision=3), use_container_width=True)
+
+        # Optional: show bar chart of top 3 total scores
+        st.markdown("### 📊 Score Comparison")
+        chart = (
+            alt.Chart(best_configs)
+            .mark_bar()
+            .encode(
+                x=alt.X("total_score:Q", title="Total Score"),
+                y=alt.Y("vector_db:N", title="Vector DB"),
+                color=alt.Color("reranking_model:N", title="Reranker"),
+                tooltip=group_fields + ["total_score"]
+            )
+            .properties(height=300)
+        )
+        st.altair_chart(chart, use_container_width=True)
