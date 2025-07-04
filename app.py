@@ -54,7 +54,7 @@ with col2:
 input_dataset = st.sidebar.selectbox("Dataset", sorted(df["input_dataset"].dropna().unique()))
 
 # ---------------- Tabs ----------------
-tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "🖼️ Image Viewer", "Testing"])
+tab1, tab2, tab3 = st.tabs(["📊 Dashboard - Individual", "⚖️ Dashboard - Comparison", "🏆 Best Config"])
 
 # ---------------- TAB 1 ----------------
 with tab1:
