@@ -168,7 +168,7 @@ with tab2:
         .encode(
             x=alt.X("Metric:N", title="Metric", sort=metrics),
             y=alt.Y("Average:Q", title="Average Score"),
-            color=alt.Color("config_label:N", title="Configuration"),
+            color=alt.Color("config_label:N", title="Configuration", legend=alt.Legend(orient="bottom")),
             #column=alt.Column("Metric:N", title="Metric", sort=metrics),  # This does the grouping
             xOffset="config_label:N",  # <- 👈 KEY for grouping side-by-side
             tooltip=["config_label", "Metric", "Average"]
