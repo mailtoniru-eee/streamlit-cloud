@@ -161,6 +161,25 @@ with tab2:
     )
     
     st.subheader("📊 Metric Comparison Across Configurations")
+
+    chart = (
+        alt.Chart(chart_df)
+        .mark_bar()
+        .encode(
+            x=alt.X("Metric:N", title="Metric", sort=metrics),
+            y=alt.Y("Average:Q", title="Average Score"),
+            color=alt.Color("config_label:N", title="Configuration"),
+            column=alt.Column("Metric:N", title="Metric", sort=metrics),  # This does the grouping
+            xOffset="config_label:N",  # <- 👈 KEY for grouping side-by-side
+            tooltip=["config_label", "Metric", "Average"]
+        )
+        .properties(
+            width=100,
+            height=400
+            )
+        )
+    
+    st.altair_chart(chart, use_container_width=True)
     
     # chart = (
     #     alt.Chart(chart_df)
@@ -176,23 +195,25 @@ with tab2:
     #     .properties(height=300)
     # )
 
-    chart = (
-        alt.Chart(chart_df)
-        .mark_bar()
-        .encode(
-            x=alt.X("Metric:N", title="Metric", sort=metrics),
-            y=alt.Y("Average:Q", title="Average Score"),
-            color=alt.Color("config_label:N", title="Configuration"),
-            tooltip=["config_label", "Metric", "Average"]
-        )
-        .properties(
-            width=600,
-            height=400,
-            title="Grouped Bar Chart: Metric Comparison by Configuration"
-            )
-    )
+    # chart = (
+    #     alt.Chart(chart_df)
+    #     .mark_bar()
+    #     .encode(
+    #         x=alt.X("Metric:N", title="Metric", sort=metrics),
+    #         y=alt.Y("Average:Q", title="Average Score"),
+    #         color=alt.Color("config_label:N", title="Configuration"),
+    #         tooltip=["config_label", "Metric", "Average"]
+    #     )
+    #     .properties(
+    #         width=600,
+    #         height=400,
+    #         title="Grouped Bar Chart: Metric Comparison by Configuration"
+    #         )
+    # )
     
-    st.altair_chart(chart, use_container_width=True)
+    # st.altair_chart(chart, use_container_width=True)
+
+    
     
 # with tab3:
 #     df3 = df.copy()
