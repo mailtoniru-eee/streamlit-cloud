@@ -112,6 +112,9 @@ with tab1:
 with tab2:
     df2 = df.copy()
     
+    # Slicers
+    input_dataset = st.sidebar.selectbox("Dataset", sorted(df1["input_dataset"].dropna().unique()))    
+    
     st.header("📊 Metric Averages (One Chart per Metric)")
     vector_dbs = st.multiselect("Vector DB", df2["vector_db"].dropna().unique(), default=None)
     reranking_models = st.multiselect("Reranking Model", df2["reranking_model"].dropna().unique(), default=None)
