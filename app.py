@@ -175,7 +175,7 @@ with tab2:
         )
         .properties(
             width=2000,
-            height=1500
+            height=1000
             )
         )
     
