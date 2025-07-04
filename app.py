@@ -49,7 +49,7 @@ with col2:
     st.image(image, width=300)
     st.markdown("</div>", unsafe_allow_html=True)
 
-tab1, tab2 = st.tabs(["📊 Dashboard", "🖼️ Image Viewer"])
+tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "🖼️ Image Viewer", "Testing"])
 
 with tab1:
     df1 = df.copy()
@@ -175,5 +175,76 @@ with tab2:
         .resolve_scale(y="shared")
         .properties(height=300)
     )
+    
+    st.altair_chart(chart, use_container_width=True)
+    
+with tab3:
+    df3 = df.copy()
+    
+    st.header("📊 Metric Grouped (One Chart per Metric)")
+    vector_dbs = st.multiselect("Vector DB", df3["vector_db"].dropna().unique(), default=None)
+    reranking_models = st.multiselect("Reranking Model", df3["reranking_model"].dropna().unique(), default=None)
+    repacking_strategys = st.multiselect("Repacking Strategy", df3["repacking_strategy"].dropna().unique(), default=None)
+    summarization_models = st.multiselect("Summarization Model", df3["summarization_model"].dropna().unique(), default=None)
+
+    filtered_df = df3.copy()
+
+    if vector_dbs:
+        filtered_df = filtered_df[filtered_df["vector_db"].isin(vector_dbs)]
+    
+    if reranking_models:
+        filtered_df = filtered_df[filtered_df["reranking_model"].isin(reranking_models)]
+    
+    if repacking_strategys:
+        filtered_df = filtered_df[filtered_df["repacking_strategy"].isin(repacking_strategies)]
+    
+    if summarization_models:
+        filtered_df = filtered_df[filtered_df["summarization_model"].isin(summarization_models)]
+
+    group_fields = [
+        "input_dataset", "vector_db", "reranking_model",
+        "repacking_strategy", "summarization_model"
+    ]
+    
+    metrics = [
+        "context_relevance", "context_utilization", "adherence", "completeness",
+        "hallucination_auroc", "relevance_rmse", "utilization_rmse"
+    ]
+    
+    # Group and average
+    clustered_df = (
+        filtered_df.groupby(group_fields)[metrics]
+        .mean()
+        .reset_index()
+    )
+    
+    # Create a label for each config to show in chart
+    clustered_df["config_label"] = clustered_df[group_fields].agg(" | ".join, axis=1)
+
+    # Prepare for grouped bar chart
+    chart_df = grouped_df.melt(
+        id_vars=["config_label"], 
+        value_vars=metrics, 
+        var_name="Metric", 
+        value_name="Average"
+    )
+    
+    st.subheader("📊 Grouped Metric Comparison Across Configurations")
+    
+    chart = (
+            alt.Chart(chart_df)
+            .mark_bar()
+            .encode(
+                x=alt.X("Metric:N", title="Metric", sort=metrics),
+                y=alt.Y("Average:Q", title="Average Score"),
+                color=alt.Color("config_label:N", title="Configuration"),
+                tooltip=["config_label", "Metric", "Average"]
+            )
+            .properties(
+                width=600,
+                height=400,
+                title="Grouped Bar Chart: Metric Comparison by Configuration"
+            )
+        )
     
     st.altair_chart(chart, use_container_width=True)
