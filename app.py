@@ -240,30 +240,33 @@ with tab3:
             min_val = grouped[metric].min()
             max_val = grouped[metric].max()
             if min_val == max_val:
-                norm = 1.0  # Avoid division by zero
+                norm = 1.0
             else:
                 norm = (grouped[metric] - min_val) / (max_val - min_val)
 
-            # Invert metrics where lower is better
             if metric in ["relevance_rmse", "utilization_rmse"]:
-                norm = 1 - norm
+                norm = 1 - norm  # Invert because lower is better
 
             norm_col = f"{metric}_norm"
             grouped[norm_col] = norm
             norm_cols.append(norm_col)
 
-        # Total score from normalized metrics
+        # Calculate total normalized score
         grouped["total_score"] = grouped[norm_cols].sum(axis=1)
 
-        # Get top 3 configurations
-        best_configs = grouped.sort_values(by="total_score", ascending=False).head(3)
+        # Sort and select top 3 configurations
+        top_n = 3
+        best_configs = grouped.sort_values(by="total_score", ascending=False).head(top_n)
 
-        st.markdown("### 🥇 Top Configurations Based on Normalized Score")
-        st.dataframe(best_configs[group_fields + ["total_score"]].style.format(precision=3), use_container_width=True)
+        st.markdown(f"### 🥇 Top {top_n} Configurations Based on Normalized Score")
+        st.dataframe(
+            best_configs[group_fields + metrics + ["total_score"]]
+            .style.format(precision=3),
+            use_container_width=True
+        )
 
-        # Bar chart comparing total scores
-        st.markdown("### 📊 Total Score Comparison")
-
+        # Optional: Chart for visual comparison
+        st.markdown("### 📊 Score Comparison")
         chart = (
             alt.Chart(best_configs)
             .mark_bar()
@@ -271,9 +274,8 @@ with tab3:
                 x=alt.X("total_score:Q", title="Total Normalized Score"),
                 y=alt.Y("summarization_model:N", title="Summarization Model"),
                 color=alt.Color("vector_db:N", title="Vector DB"),
-                tooltip=group_fields + ["total_score"]
+                tooltip=group_fields + metrics + ["total_score"]
             )
             .properties(height=350)
         )
-
         st.altair_chart(chart, use_container_width=True)
