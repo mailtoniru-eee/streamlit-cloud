@@ -136,8 +136,8 @@ with tab2:
         filtered_df = filtered_df[filtered_df["generator_model"].isin(generator_models)]        
 
     group_fields = [
-        "input_dataset", "vector_db", "reranking_model",
-        "repacking_strategy", "summarization_model"
+        "input_dataset", "vector_db", "embedding_model", "reranking_model",
+        "repacking_strategy", "summarization_model", "generator_model"
     ]
 
     metrics = [
@@ -230,7 +230,8 @@ with tab3:
     df3 = df[df["input_dataset"] == input_dataset]
 
     group_fields = [
-        "vector_db", "reranking_model", "repacking_strategy", "summarization_model"
+        "vector_db", "embedding_model", "reranking_model",
+        "repacking_strategy", "summarization_model", "generator_model"
     ]
 
     metrics = [
