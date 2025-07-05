@@ -62,16 +62,20 @@ with tab1:
 
     # Second-level slicers
     vector_db = st.selectbox("Vector DB", sorted(df1["vector_db"].dropna().unique()))
+    embedding_model = st.selectbox("Embedding Model", sorted(df1["embedding_model"].dropna().unique()))
     reranking_model = st.selectbox("Reranking Model", sorted(df1["reranking_model"].dropna().unique()))
     repacking_strategy = st.selectbox("Repacking Strategy", sorted(df1["repacking_strategy"].dropna().unique()))
     summarization_model = st.selectbox("Summarization Model", sorted(df1["summarization_model"].dropna().unique()))
+    generator_model = st.selectbox("Generator Model", sorted(df1["generator_model"].dropna().unique()))
 
     # Apply filters
     filtered_df = df1[
         (df1["vector_db"] == vector_db) &
+        (df1["embedding_model"] == embedding_model) &
         (df1["reranking_model"] == reranking_model) &
         (df1["repacking_strategy"] == repacking_strategy) &
-        (df1["summarization_model"] == summarization_model)
+        (df1["summarization_model"] == summarization_model) &
+        (df1["generator_model"] == generator_model)
     ]
 
     metrics = [
@@ -109,21 +113,27 @@ with tab2:
     st.header("📊 Metric Comparison Across Configurations")
 
     vector_dbs = st.multiselect("Vector DB", df2["vector_db"].dropna().unique())
+    embedding_models = st.multiselect("Embedding Model", df2["embedding_model"].dropna().unique())
     reranking_models = st.multiselect("Reranking Model", df2["reranking_model"].dropna().unique())
     repacking_strategies = st.multiselect("Repacking Strategy", df2["repacking_strategy"].dropna().unique())
     summarization_models = st.multiselect("Summarization Model", df2["summarization_model"].dropna().unique())
+    generator_models = st.multiselect("Generator Model", df2["generator_model"].dropna().unique())
 
     # Apply filters
     filtered_df = df2.copy()
 
     if vector_dbs:
         filtered_df = filtered_df[filtered_df["vector_db"].isin(vector_dbs)]
+    if embedding_models:
+        filtered_df = filtered_df[filtered_df["embedding_model"].isin(vector_dbs)]        
     if reranking_models:
         filtered_df = filtered_df[filtered_df["reranking_model"].isin(reranking_models)]
     if repacking_strategies:
         filtered_df = filtered_df[filtered_df["repacking_strategy"].isin(repacking_strategies)]
     if summarization_models:
         filtered_df = filtered_df[filtered_df["summarization_model"].isin(summarization_models)]
+    if generator_models:
+        filtered_df = filtered_df[filtered_df["generator_model"].isin(generator_models)]        
 
     group_fields = [
         "input_dataset", "vector_db", "reranking_model",
