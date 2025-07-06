@@ -28,7 +28,7 @@ supabase: Client = init_supabase()
 
 @st.cache_data(ttl=300)  # Refresh cache every 300 seconds
 def get_data():
-    response = supabase.table("rag_metrics").select("*").execute()
+    response = supabase.table("rag_metrics").select("*").range(0, 9999).execute()
     return pd.DataFrame(response.data)
 
 df = get_data()
