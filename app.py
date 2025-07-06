@@ -47,11 +47,6 @@ df = df.drop(columns=["input_variable"]).reset_index(drop=True)
 input_vars_df = input_vars_df.reset_index(drop=True)
 df = pd.concat([df, input_vars_df], axis=1)
 
-st.sidebar.markdown("#### Available Datasets:")
-st.sidebar.write(sorted(df["input_dataset"].unique()))
-
-st.sidebar.write(f"🔎 Number of rows fetched: {len(df)}")
-
 # --------------------- UI Header ------------------------
 st.subheader("Group 23 - RAG Application - RAGBench Dataset")
 
@@ -61,6 +56,8 @@ with col2:
 
 # ---------------- Sidebar: Shared Filters ----------------
 input_dataset = st.sidebar.selectbox("Dataset", sorted(df["input_dataset"].dropna().unique()))
+
+st.sidebar.write(f"🔎 Number of rows fetched: {len(df)}")
 
 # ---------------- Tabs ----------------
 tab1, tab2, tab3 = st.tabs(["📊 Dashboard - Individual", "⚖️ Dashboard - Comparison", "🏆 Best Config"])
