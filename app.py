@@ -50,7 +50,7 @@ df = pd.concat([df, input_vars_df], axis=1)
 st.sidebar.markdown("#### Available Datasets:")
 st.sidebar.write(sorted(df["input_dataset"].unique()))
 
-st.write(f"🔎 Number of rows fetched: {len(df)}")
+st.sidebar.write(f"🔎 Number of rows fetched: {len(df)}")
 
 # --------------------- UI Header ------------------------
 st.subheader("Group 23 - RAG Application - RAGBench Dataset")
