@@ -69,19 +69,23 @@ with tab1:
     # Second-level slicers
     vector_db = st.selectbox("Vector DB", sorted(df1["vector_db"].dropna().unique()))
     embedding_model = st.selectbox("Embedding Model", sorted(df1["embedding_model"].dropna().unique()))
+    chunking_type = st.selectbox("Chunking Type", sorted(df1["chunking_type"].dropna().unique()))
     reranking_model = st.selectbox("Reranking Model", sorted(df1["reranking_model"].dropna().unique()))
     repacking_strategy = st.selectbox("Repacking Strategy", sorted(df1["repacking_strategy"].dropna().unique()))
     summarization_model = st.selectbox("Summarization Model", sorted(df1["summarization_model"].dropna().unique()))
     generator_model = st.selectbox("Generator Model", sorted(df1["generator_model"].dropna().unique()))
+    template = st.selectbox("Template Used", sorted(df1["template"].dropna().unique()))
 
     # Apply filters
     filtered_df = df1[
         (df1["vector_db"] == vector_db) &
         (df1["embedding_model"] == embedding_model) &
+        (df1["chunking_type"] == chunking_type) &
         (df1["reranking_model"] == reranking_model) &
         (df1["repacking_strategy"] == repacking_strategy) &
         (df1["summarization_model"] == summarization_model) &
-        (df1["generator_model"] == generator_model)
+        (df1["generator_model"] == generator_model) &
+        (df1["template"] == template)
     ]
 
     metrics = [
@@ -120,10 +124,12 @@ with tab2:
 
     vector_dbs = st.multiselect("Vector DB", df2["vector_db"].dropna().unique())
     embedding_models = st.multiselect("Embedding Model", df2["embedding_model"].dropna().unique())
+    chunking_types = st.multiselect("Chunking Type", df2["chunking_type"].dropna().unique())
     reranking_models = st.multiselect("Reranking Model", df2["reranking_model"].dropna().unique())
     repacking_strategies = st.multiselect("Repacking Strategy", df2["repacking_strategy"].dropna().unique())
     summarization_models = st.multiselect("Summarization Model", df2["summarization_model"].dropna().unique())
     generator_models = st.multiselect("Generator Model", df2["generator_model"].dropna().unique())
+    templates = st.multiselect("Templates Used", df2["template"].dropna().unique())
 
     # Apply filters
     filtered_df = df2.copy()
@@ -131,7 +137,9 @@ with tab2:
     if vector_dbs:
         filtered_df = filtered_df[filtered_df["vector_db"].isin(vector_dbs)]
     if embedding_models:
-        filtered_df = filtered_df[filtered_df["embedding_model"].isin(vector_dbs)]        
+        filtered_df = filtered_df[filtered_df["embedding_model"].isin(embedding_models)]
+    if chunking_types:
+        filtered_df = filtered_df[filtered_df["chunking_type"].isin(chunking_types)]
     if reranking_models:
         filtered_df = filtered_df[filtered_df["reranking_model"].isin(reranking_models)]
     if repacking_strategies:
@@ -139,11 +147,13 @@ with tab2:
     if summarization_models:
         filtered_df = filtered_df[filtered_df["summarization_model"].isin(summarization_models)]
     if generator_models:
-        filtered_df = filtered_df[filtered_df["generator_model"].isin(generator_models)]        
+        filtered_df = filtered_df[filtered_df["generator_model"].isin(generator_models)]
+    if templates:
+        filtered_df = filtered_df[filtered_df["template"].isin(templates)]        
 
     group_fields = [
-        "input_dataset", "vector_db", "embedding_model", "reranking_model",
-        "repacking_strategy", "summarization_model", "generator_model"
+        "input_dataset", "vector_db", "embedding_model", "chunking_type", "reranking_model",
+        "repacking_strategy", "summarization_model", "generator_model", "template"
     ]
 
     metrics = [
@@ -236,8 +246,8 @@ with tab3:
     df3 = df[df["input_dataset"] == input_dataset]
 
     group_fields = [
-        "vector_db", "embedding_model", "reranking_model",
-        "repacking_strategy", "summarization_model", "generator_model"
+        "vector_db", "embedding_model", "chunking_type", "reranking_model",
+        "repacking_strategy", "summarization_model", "generator_model", "template"
     ]
 
     metrics = [
