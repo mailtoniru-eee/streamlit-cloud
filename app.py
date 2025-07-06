@@ -5,6 +5,10 @@ import pandas as pd
 from PIL import Image
 import json
 
+if st.button("🔄 Refresh Data"):
+    st.cache_data.clear()  # Clears only the data cache
+    st.rerun()             # Forces the app to reload fresh data
+
 # Load logo image
 image = Image.open("logo/iith.jpg")
 
@@ -22,7 +26,7 @@ def init_supabase():
 
 supabase: Client = init_supabase()
 
-@st.cache_data
+@st.cache_data(ttl=300)  # Refresh cache every 300 seconds
 def get_data():
     response = supabase.table("rag_metrics").select("*").execute()
     return pd.DataFrame(response.data)
