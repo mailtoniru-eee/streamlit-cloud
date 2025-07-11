@@ -282,7 +282,7 @@ with tab3:
         grouped["total_score"] = grouped[norm_cols].sum(axis=1)
 
         # Sort and select top 3 configurations
-        top_n = 3
+        top_n = 5
         best_configs = grouped.sort_values(by="total_score", ascending=False).head(top_n)
 
         st.markdown(f"### 🥇 Top {top_n} Configurations Based on Normalized Score")
