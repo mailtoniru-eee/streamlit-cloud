@@ -348,10 +348,14 @@ with tab3:
         with col1:
             st.markdown("### 🥇 1st")
             st.metric("Score", f"{podium.loc[0, 'total_score']:.3f}")
-            st.markdown(f"**Vector DB:** {podium.loc[0, 'vector_db']}")
-            st.markdown(f"**Summarization:** {podium.loc[0, 'summarization_model']}")
-            st.markdown(f"**Generator:** {podium.loc[0, 'generator_model']}")
-            st.markdown(f"**Reranking Model:** {podium.loc[0, 'reranking_model']}")
+            # st.markdown(f"**Vector DB:** {podium.loc[0, 'vector_db']}")
+            # st.markdown(f"**Summarization:** {podium.loc[0, 'summarization_model']}")
+            # st.markdown(f"**Generator:** {podium.loc[0, 'generator_model']}")
+            # st.markdown(f"**Reranking Model:** {podium.loc[0, 'reranking_model']}")
+            st.markdown(f"**Vector DB:** <span style='color:#39FF14'>{podium.loc[0, 'vector_db']}</span>", unsafe_allow_html=True)
+            st.markdown(f"**Summarization:** <span style='color:#39FF14'>{podium.loc[0, 'summarization_model']}</span>", unsafe_allow_html=True)
+            st.markdown(f"**Generator:** <span style='color:#39FF14'>{podium.loc[0, 'generator_model']}</span>", unsafe_allow_html=True)
+            st.markdown(f"**Reranking Model:** <span style='color:#39FF14'>{podium.loc[0, 'reranking_model']}</span>", unsafe_allow_html=True)
         
         with col2:
             st.markdown("### 🥈 2nd")
