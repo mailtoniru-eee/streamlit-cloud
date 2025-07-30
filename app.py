@@ -339,16 +339,21 @@ with tab3:
                 )
 
         # Optional: Chart for visual comparison
-        st.markdown("### 📊 Score Comparison")
-        chart = (
-            alt.Chart(best_configs)
-            .mark_bar()
-            .encode(
-                x=alt.X("total_score:Q", title="Total Normalized Score"),
-                y=alt.Y("summarization_model:N", title="Summarization Model"),
-                color=alt.Color("vector_db:N", title="Vector DB"),
-                tooltip=group_fields + metrics + ["total_score"]
-            )
-            .properties(height=350)
-        )
-        st.altair_chart(chart, use_container_width=True)
+        # st.markdown("### 📊 Score Comparison")
+        # chart = (
+        #     alt.Chart(best_configs)
+        #     .mark_bar()
+        #     .encode(
+        #         x=alt.X("total_score:Q", title="Total Normalized Score"),
+        #         y=alt.Y("summarization_model:N", title="Summarization Model"),
+        #         color=alt.Color("vector_db:N", title="Vector DB"),
+        #         tooltip=group_fields + metrics + ["total_score"]
+        #     )
+        #     .properties(height=350)
+        # )
+        # st.altair_chart(chart, use_container_width=True)
+        with st.expander("📋 Score Comparison Table"):
+            score_cols = ["total_score"] + metrics
+            score_display = best_configs[["summarization_model", "vector_db"] + score_cols].copy()
+            score_display = score_display.rename(columns=lambda c: c.replace("_", " ").title())
+            st.dataframe(score_display.style.format(precision=3), use_container_width=True)
