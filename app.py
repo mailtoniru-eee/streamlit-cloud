@@ -352,8 +352,48 @@ with tab3:
         #     .properties(height=350)
         # )
         # st.altair_chart(chart, use_container_width=True)
-        with st.expander("📋 Score Comparison Table"):
-            score_cols = ["total_score"] + metrics
-            score_display = best_configs[["summarization_model", "vector_db"] + score_cols].copy()
-            score_display = score_display.rename(columns=lambda c: c.replace("_", " ").title())
-            st.dataframe(score_display.style.format(precision=3), use_container_width=True)
+        # with st.expander("📋 Score Comparison Table"):
+        #     score_cols = ["total_score"] + metrics
+        #     score_display = best_configs[["summarization_model", "vector_db"] + score_cols].copy()
+        #     score_display = score_display.rename(columns=lambda c: c.replace("_", " ").title())
+        #     st.dataframe(score_display.style.format(precision=3), use_container_width=True)
+        st.markdown("### 🏆 Top 5 Configurations Leaderboard")
+
+        podium = best_configs.reset_index(drop=True)
+        
+        # Top 3 - Podium Style
+        col2, col1, col3 = st.columns([1, 1.2, 1])  # 2nd, 1st, 3rd
+        
+        with col2:
+            st.markdown("### 🥈 2nd")
+            st.metric("Score", f"{podium.loc[1, 'total_score']:.3f}")
+            st.markdown(f"**Summarization:** {podium.loc[1, 'summarization_model']}")
+            st.markdown(f"**Generator:** {podium.loc[1, 'generator_model']}")
+        
+        with col1:
+            st.markdown("### 🥇 1st")
+            st.metric("Score", f"{podium.loc[0, 'total_score']:.3f}")
+            st.markdown(f"**Summarization:** {podium.loc[0, 'summarization_model']}")
+            st.markdown(f"**Generator:** {podium.loc[0, 'generator_model']}")
+        
+        with col3:
+            st.markdown("### 🥉 3rd")
+            st.metric("Score", f"{podium.loc[2, 'total_score']:.3f}")
+            st.markdown(f"**Summarization:** {podium.loc[2, 'summarization_model']}")
+            st.markdown(f"**Generator:** {podium.loc[2, 'generator_model']}")
+        
+        # 4th and 5th below
+        st.markdown("### 🎖️ Honorable Mentions")
+        
+        for idx in [3, 4]:
+            config = podium.loc[idx]
+            with st.expander(f"#{idx+1} - Score: {config['total_score']:.3f}"):
+                st.markdown(f"**Vector DB:** {config['vector_db']}")
+                st.markdown(f"**Embedding Model:** {config['embedding_model']}")
+                st.markdown(f"**Chunking Type:** {config['chunking_type']}")
+                st.markdown(f"**Reranking Model:** {config['reranking_model']}")
+                st.markdown(f"**Summarization Model:** {config['summarization_model']}")
+                st.markdown(f"**Generator Model:** {config['generator_model']}")
+                st.markdown(f"**Template:** {config['template']}")
+                st.markdown("#### Metrics:")
+                st.write(config[metrics].round(3))
