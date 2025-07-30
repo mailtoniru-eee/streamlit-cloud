@@ -135,10 +135,19 @@ with tab1:
 
 # ---------------- TAB 2 ----------------
 with tab2:
-    df2 = df[df["input_dataset"] == input_dataset]
+    comparison_level = st.radio("Compare configurations by:", ["Dataset", "Domain"], horizontal=True)
+
+    if comparison_level == "Dataset":
+        selected_value = st.selectbox("Select Dataset", sorted(df["input_dataset"].dropna().unique()))
+        df2 = df[df["input_dataset"] == selected_value]
+    else:
+        selected_value = st.selectbox("Select Domain", sorted(df["domain"].dropna().unique()))
+        df2 = df[df["domain"] == selected_value]
 
     st.header("📊 Metric Comparison Across Configurations")
-
+    
+    st.markdown(f"### Comparing Configurations for **{comparison_level}: {selected_value}**")
+    
     vector_dbs = st.multiselect("Vector DB", df2["vector_db"].dropna().unique())
     embedding_models = st.multiselect("Embedding Model", df2["embedding_model"].dropna().unique())
     chunking_types = st.multiselect("Chunking Type", df2["chunking_type"].dropna().unique())
