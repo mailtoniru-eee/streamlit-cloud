@@ -47,8 +47,22 @@ df = df.drop(columns=["input_variable"]).reset_index(drop=True)
 input_vars_df = input_vars_df.reset_index(drop=True)
 df = pd.concat([df, input_vars_df], axis=1)
 
-# ---------------- Add dataset-to-domain mapping ----------------
-dataset_domain_map = {
+# --------------------- UI Header ------------------------
+st.subheader("Group 23 - RAG Application - RAGBench Dataset")
+
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image(image, width=300)
+
+# ---------------- Sidebar: Shared Filters ----------------
+
+# Sidebar: Selection Level (Dataset vs Domain)
+selection_level = st.sidebar.radio("View Level", ["Dataset", "Domain"], horizontal=True)
+
+if selection_level == "Dataset":
+    selected_value = st.sidebar.selectbox("Dataset", sorted(df["input_dataset"].dropna().unique()), key="dataset_sidebar")
+else:
+    dataset_domain_map = {
     "pubmedqa": "Bio-medical Research",
     "covidqa": "Bio-medical Research",
     "hotpotqa": "General Knowledge",
@@ -59,19 +73,10 @@ dataset_domain_map = {
     "emanual": "Customer Support",
     "techqa": "Customer Support",
     "finqa": "Finance",
-    "tatqa": "Finance"
-}
+    "tatqa": "Finance"}
+    df["domain"] = df["input_dataset"].map(dataset_domain_map)
+    selected_value = st.sidebar.selectbox("Domain", sorted(df["domain"].dropna().unique()), key="domain_sidebar")
 
-df["domain"] = df["input_dataset"].map(dataset_domain_map)
-
-# --------------------- UI Header ------------------------
-st.subheader("Group 23 - RAG Application - RAGBench Dataset")
-
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.image(image, width=300)
-
-# ---------------- Sidebar: Shared Filters ----------------
 input_dataset = st.sidebar.selectbox("Dataset", sorted(df["input_dataset"].dropna().unique()))
 
 st.sidebar.write(f"🔎 Number of rows fetched: {len(df)}")
@@ -81,7 +86,10 @@ tab1, tab2, tab3 = st.tabs(["📊 Dashboard - Individual", "⚖️ Dashboard - C
 
 # ---------------- TAB 1 ----------------
 with tab1:
-    df1 = df[df["input_dataset"] == input_dataset]
+    if selection_level == "Dataset":
+        df1 = df[df["input_dataset"] == selected_value]
+    else:
+        df1 = df[df["domain"] == selected_value]
 
     # Second-level slicers
     vector_db = st.selectbox("Vector DB", sorted(df1["vector_db"].dropna().unique()))
@@ -135,19 +143,14 @@ with tab1:
 
 # ---------------- TAB 2 ----------------
 with tab2:
-    comparison_level = st.radio("Compare configurations by:", ["Dataset", "Domain"], horizontal=True)
-
-    if comparison_level == "Dataset":
-        selected_value = st.selectbox("Select Dataset", sorted(df["input_dataset"].dropna().unique()))
+    
+    if selection_level == "Dataset":
         df2 = df[df["input_dataset"] == selected_value]
     else:
-        selected_value = st.selectbox("Select Domain", sorted(df["domain"].dropna().unique()))
         df2 = df[df["domain"] == selected_value]
 
     st.header("📊 Metric Comparison Across Configurations")
-    
-    st.markdown(f"### Comparing Configurations for **{comparison_level}: {selected_value}**")
-    
+
     vector_dbs = st.multiselect("Vector DB", df2["vector_db"].dropna().unique())
     embedding_models = st.multiselect("Embedding Model", df2["embedding_model"].dropna().unique())
     chunking_types = st.multiselect("Chunking Type", df2["chunking_type"].dropna().unique())
@@ -222,127 +225,14 @@ with tab2:
 
     st.altair_chart(chart, use_container_width=False)
 
-# with tab3:
-#     st.header("🏆 Best Configuration for Selected Dataset")
 
-#     df3 = df[df["input_dataset"] == input_dataset]
-
-#     group_fields = [
-#         "vector_db", "reranking_model", "repacking_strategy", "summarization_model"
-#     ]
-
-#     metrics = [
-#         "context_relevance", "context_utilization", "adherence", "completeness",
-#         "hallucination_auroc", "relevance_rmse", "utilization_rmse"
-#     ]
-
-#     if df3.empty:
-#         st.warning("No data available for the selected dataset.")
-#     else:
-#         # Group by config and compute mean of each metric
-#         grouped = df3.groupby(group_fields)[metrics].mean().reset_index()
-
-#         # Calculate a combined score (you can adjust weights if needed)
-#         grouped["total_score"] = grouped[metrics].sum(axis=1)
-
-#         # Get row(s) with max total score
-#         best_configs = grouped.sort_values(by="total_score", ascending=False).head(3)
-
-#         st.markdown("### 🥇 Top Configurations")
-#         st.dataframe(best_configs.style.format(precision=3), use_container_width=True)
-
-#         # Optional: show bar chart of top 3 total scores
-#         st.markdown("### 📊 Score Comparison")
-#         chart = (
-#             alt.Chart(best_configs)
-#             .mark_bar()
-#             .encode(
-#                 x=alt.X("total_score:Q", title="Total Score"),
-#                 y=alt.Y("vector_db:N", title="Vector DB"),
-#                 color=alt.Color("reranking_model:N", title="Reranker"),
-#                 tooltip=group_fields + ["total_score"]
-#             )
-#             .properties(height=300)
-#         )
-#         st.altair_chart(chart, use_container_width=True)
-
-# with tab3:
-#     st.header("🏆 Best Configuration for Selected Dataset")
-
-#     df3 = df[df["input_dataset"] == input_dataset]
-
-#     group_fields = [
-#         "vector_db", "embedding_model", "chunking_type", "reranking_model",
-#         "repacking_strategy", "summarization_model", "generator_model", "template"
-#     ]
-
-#     metrics = [
-#         "context_relevance", "context_utilization", "adherence", "completeness",
-#         "hallucination_auroc", "relevance_rmse", "utilization_rmse"
-#     ]
-
-#     if df3.empty:
-#         st.warning("No data available for the selected dataset.")
-#     else:
-#         # Group and compute mean of metrics
-#         grouped = df3.groupby(group_fields)[metrics].mean().reset_index()
-
-#         # Normalize each metric
-#         norm_cols = []
-#         for metric in metrics:
-#             min_val = grouped[metric].min()
-#             max_val = grouped[metric].max()
-#             if min_val == max_val:
-#                 norm = 1.0
-#             else:
-#                 norm = (grouped[metric] - min_val) / (max_val - min_val)
-
-#             if metric in ["relevance_rmse", "utilization_rmse"]:
-#                 norm = 1 - norm  # Invert because lower is better
-
-#             norm_col = f"{metric}_norm"
-#             grouped[norm_col] = norm
-#             norm_cols.append(norm_col)
-
-#         # Calculate total normalized score
-#         grouped["total_score"] = grouped[norm_cols].sum(axis=1)
-
-#         # Sort and select top 3 configurations
-#         top_n = 5
-#         best_configs = grouped.sort_values(by="total_score", ascending=False).head(top_n)
-
-#         st.markdown(f"### 🥇 Top {top_n} Configurations Based on Normalized Score")
-#         st.dataframe(
-#             best_configs[group_fields + metrics + ["total_score"]]
-#             .style.format(precision=3),
-#             use_container_width=True
-#         )
-
-#         # Optional: Chart for visual comparison
-#         st.markdown("### 📊 Score Comparison")
-#         chart = (
-#             alt.Chart(best_configs)
-#             .mark_bar()
-#             .encode(
-#                 x=alt.X("total_score:Q", title="Total Normalized Score"),
-#                 y=alt.Y("summarization_model:N", title="Summarization Model"),
-#                 color=alt.Color("vector_db:N", title="Vector DB"),
-#                 tooltip=group_fields + metrics + ["total_score"]
-#             )
-#             .properties(height=350)
-#         )
-#         st.altair_chart(chart, use_container_width=True)
 with tab3:
-    st.header("🏆 Best Configuration Selector")
+    st.header("🏆 Best Configuration for Selected Dataset")
 
-    view_level = st.radio("View best configuration by:", ["Dataset", "Domain"], horizontal=True)
-
-    if view_level == "Dataset":
-        selected_value = st.selectbox("Select Dataset", sorted(df["input_dataset"].dropna().unique()))
-        filtered_df = df[df["input_dataset"] == selected_value]
+    if selection_level == "Dataset":
+        df3 = df[df["input_dataset"] == selected_value]
     else:
-        selected_value = st.selectbox("Select Domain", sorted(df["domain"].dropna().unique()))
-        filtered_df = df[df["domain"] == selected_value]
+        df3 = df[df["domain"] == selected_value]
 
     group_fields = [
         "vector_db", "embedding_model", "chunking_type", "reranking_model",
@@ -354,11 +244,13 @@ with tab3:
         "hallucination_auroc", "relevance_rmse", "utilization_rmse"
     ]
 
-    if filtered_df.empty:
-        st.warning("No data available for the selected filter.")
+    if df3.empty:
+        st.warning("No data available for the selected dataset.")
     else:
-        grouped = filtered_df.groupby(group_fields)[metrics].mean().reset_index()
+        # Group and compute mean of metrics
+        grouped = df3.groupby(group_fields)[metrics].mean().reset_index()
 
+        # Normalize each metric
         norm_cols = []
         for metric in metrics:
             min_val = grouped[metric].min()
@@ -367,23 +259,29 @@ with tab3:
                 norm = 1.0
             else:
                 norm = (grouped[metric] - min_val) / (max_val - min_val)
+
             if metric in ["relevance_rmse", "utilization_rmse"]:
-                norm = 1 - norm
+                norm = 1 - norm  # Invert because lower is better
+
             norm_col = f"{metric}_norm"
             grouped[norm_col] = norm
             norm_cols.append(norm_col)
 
+        # Calculate total normalized score
         grouped["total_score"] = grouped[norm_cols].sum(axis=1)
 
+        # Sort and select top 3 configurations
         top_n = 5
         best_configs = grouped.sort_values(by="total_score", ascending=False).head(top_n)
 
-        st.markdown(f"### 🥇 Top {top_n} Configurations for **{selected_value}**")
+        st.markdown(f"### 🥇 Top {top_n} Configurations Based on Normalized Score")
         st.dataframe(
-            best_configs[group_fields + metrics + ["total_score"]].style.format(precision=3),
+            best_configs[group_fields + metrics + ["total_score"]]
+            .style.format(precision=3),
             use_container_width=True
         )
 
+        # Optional: Chart for visual comparison
         st.markdown("### 📊 Score Comparison")
         chart = (
             alt.Chart(best_configs)
