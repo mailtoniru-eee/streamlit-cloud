@@ -385,8 +385,8 @@ with tab3:
         # 4th and 5th below
         st.markdown("### 🎖️ Honorable Mentions")
         
-        for idx in [3, 4]:
-            config = podium.loc[idx]
+        for idx in range(3, min(5, len(podium))):  # only access rows that exist
+            config = podium.iloc[idx]
             with st.expander(f"#{idx+1} - Score: {config['total_score']:.3f}"):
                 st.markdown(f"**Vector DB:** {config['vector_db']}")
                 st.markdown(f"**Embedding Model:** {config['embedding_model']}")
