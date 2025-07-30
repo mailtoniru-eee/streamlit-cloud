@@ -331,7 +331,7 @@ with tab3:
         top_n = 5
         best_configs = grouped.sort_values(by="total_score", ascending=False).head(top_n)
 
-        st.markdown(f"### 🥇 Top {top_n} Configurations Based on Normalized Score")
+        st.markdown(f"### Top {top_n} Configurations Based on Normalized Score")
         st.dataframe(
                     best_configs[group_fields + metrics + ["total_score"]]
                     .style.format(precision=3),
@@ -362,19 +362,19 @@ with tab3:
         podium = best_configs.reset_index(drop=True)
         
         # Top 3 - Podium Style
-        col2, col1, col3 = st.columns([1, 1.2, 1])  # 2nd, 1st, 3rd
+        col1, col2, col3 = st.columns([1, 1.2, 1])  # 2nd, 1st, 3rd
+
+        with col1:
+            st.markdown("### 🥇 1st")
+            st.metric("Score", f"{podium.loc[0, 'total_score']:.3f}")
+            st.markdown(f"**Summarization:** {podium.loc[0, 'summarization_model']}")
+            st.markdown(f"**Generator:** {podium.loc[0, 'generator_model']}")
         
         with col2:
             st.markdown("### 🥈 2nd")
             st.metric("Score", f"{podium.loc[1, 'total_score']:.3f}")
             st.markdown(f"**Summarization:** {podium.loc[1, 'summarization_model']}")
             st.markdown(f"**Generator:** {podium.loc[1, 'generator_model']}")
-        
-        with col1:
-            st.markdown("### 🥇 1st")
-            st.metric("Score", f"{podium.loc[0, 'total_score']:.3f}")
-            st.markdown(f"**Summarization:** {podium.loc[0, 'summarization_model']}")
-            st.markdown(f"**Generator:** {podium.loc[0, 'generator_model']}")
         
         with col3:
             st.markdown("### 🥉 3rd")
