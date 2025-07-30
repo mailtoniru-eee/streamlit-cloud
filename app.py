@@ -390,6 +390,7 @@ with tab3:
                     .style.format(precision=3),
                     width=1400  # You can increase or decrease this based on screen size
                 )
+        st.markdown("<br><br><br>", unsafe_allow_html=True)  # Adds vertical space
 
         # Optional: Chart for visual comparison
         # st.markdown("### 📊 Score Comparison")
