@@ -331,7 +331,7 @@ with tab3:
         top_n = 5
         best_configs = grouped.sort_values(by="total_score", ascending=False).head(top_n)
 
-        st.markdown("### 🏆 Top 5 Configurations Leaderboard")
+        # st.markdown("### 🏆 Top 5 Configurations Leaderboard")
 
         podium = best_configs.reset_index(drop=True)
         
