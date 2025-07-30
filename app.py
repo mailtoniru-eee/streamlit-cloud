@@ -49,17 +49,17 @@ df = pd.concat([df, input_vars_df], axis=1)
 
 # ---------------- Add dataset-to-domain mapping ----------------
 dataset_domain_map = {
-    "PubmedQA": "Bio-medical Research",
-    "CovidQA": "Bio-medical Research",
-    "HotpotQA": "General Knowledge",
-    "MS Marco": "General Knowledge",
-    "HAGRID": "General Knowledge",
-    "ExperQA": "General Knowledge",
-    "DelucionQA": "Customer Support",
-    "EManual": "Customer Support",
-    "TechQA": "Customer Support",
-    "FinBench": "Finance",
-    "TAT-QA": "Finance"
+    "pubmedqa": "Bio-medical Research",
+    "covidqa": "Bio-medical Research",
+    "hotpotqa": "General Knowledge",
+    "msmarco": "General Knowledge",
+    "hagrid": "General Knowledge",
+    "expertqa": "General Knowledge",
+    "delucionqa": "Customer Support",
+    "emanual": "Customer Support",
+    "techqa": "Customer Support",
+    "finqa": "Finance",
+    "tatqa": "Finance"
 }
 
 df["domain"] = df["input_dataset"].map(dataset_domain_map)
