@@ -367,12 +367,14 @@ with tab3:
         with col1:
             st.markdown("### 🥇 1st")
             st.metric("Score", f"{podium.loc[0, 'total_score']:.3f}")
+            st.markdown(f"**Vector DB:** {podium.loc[0, 'vector_db']}")
             st.markdown(f"**Summarization:** {podium.loc[0, 'summarization_model']}")
             st.markdown(f"**Generator:** {podium.loc[0, 'generator_model']}")
         
         with col2:
             st.markdown("### 🥈 2nd")
             st.metric("Score", f"{podium.loc[1, 'total_score']:.3f}")
+            st.markdown(f"**Vector DB:** {podium.loc[1, 'vector_db']}")
             st.markdown(f"**Summarization:** {podium.loc[1, 'summarization_model']}")
             st.markdown(f"**Generator:** {podium.loc[1, 'generator_model']}")
         
