@@ -360,18 +360,18 @@ with tab3:
         with col2:
             st.markdown("### 🥈 2nd")
             st.metric("Score", f"{podium.loc[1, 'total_score']:.3f}")
-            st.markdown(f"**Vector DB:** {podium.loc[1, 'vector_db']}")
-            st.markdown(f"**Summarization:** {podium.loc[1, 'summarization_model']}")
-            st.markdown(f"**Generator:** {podium.loc[1, 'generator_model']}")
-            st.markdown(f"**Reranking Model:** {podium.loc[1, 'reranking_model']}")
+            st.markdown(f"**Vector DB:** <span style='color:#39FF14'>{podium.loc[1, 'vector_db']}</span>", unsafe_allow_html=True)
+            st.markdown(f"**Summarization:** <span style='color:#39FF14'>{podium.loc[1, 'summarization_model']}</span>", unsafe_allow_html=True)
+            st.markdown(f"**Generator:** <span style='color:#39FF14'>{podium.loc[1, 'generator_model']}</span>", unsafe_allow_html=True)
+            st.markdown(f"**Reranking Model:** <span style='color:#39FF14'>{podium.loc[1, 'reranking_model']}</span>", unsafe_allow_html=True)
         
         with col3:
             st.markdown("### 🥉 3rd")
             st.metric("Score", f"{podium.loc[2, 'total_score']:.3f}")
-            st.markdown(f"**Vector DB:** {podium.loc[2, 'vector_db']}")
-            st.markdown(f"**Summarization:** {podium.loc[2, 'summarization_model']}")
-            st.markdown(f"**Generator:** {podium.loc[2, 'generator_model']}")
-            st.markdown(f"**Reranking Model:** {podium.loc[2, 'reranking_model']}")
+            st.markdown(f"**Vector DB:** <span style='color:#39FF14'>{podium.loc[2, 'vector_db']}</span>", unsafe_allow_html=True)
+            st.markdown(f"**Summarization:** <span style='color:#39FF14'>{podium.loc[2, 'summarization_model']}</span>", unsafe_allow_html=True)
+            st.markdown(f"**Generator:** <span style='color:#39FF14'>{podium.loc[2, 'generator_model']}</span>", unsafe_allow_html=True)
+            st.markdown(f"**Reranking Model:** <span style='color:#39FF14'>{podium.loc[2, 'reranking_model']}</span>", unsafe_allow_html=True)
         
         # 4th and 5th below
         st.markdown("### 🎖️ Honorable Mentions")
@@ -379,10 +379,10 @@ with tab3:
         for idx in range(3, min(5, len(podium))):  # only access rows that exist
             config = podium.iloc[idx]
             with st.expander(f"#{idx+1} - Score: {config['total_score']:.3f}"):
-                st.markdown(f"**Vector DB:** {config['vector_db']}")
-                st.markdown(f"**Summarization Model:** {config['summarization_model']}")
-                st.markdown(f"**Generator Model:** {config['generator_model']}")
-                st.markdown(f"**Reranking Model:** {config['reranking_model']}")        
+                st.markdown(f"**Vector DB:** <span style='color:#FFD700'>{config['vector_db']}</span>", unsafe_allow_html=True)
+                st.markdown(f"**Summarization Model:** <span style='color:#FFD700'>{config['summarization_model']}</span>", unsafe_allow_html=True)
+                st.markdown(f"**Generator Model:** <span style='color:#FFD700'>{config['generator_model']}</span>", unsafe_allow_html=True)
+                st.markdown(f"**Reranking Model:** <span style='color:#FFD700'>{config['reranking_model']}</span>", unsafe_allow_html=True)
 
         st.markdown(f"### Top {top_n} Configurations Based on Normalized Score")
         st.dataframe(
