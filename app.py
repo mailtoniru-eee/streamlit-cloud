@@ -50,6 +50,32 @@ df = pd.concat([df, input_vars_df], axis=1)
 # --------------------- UI Header ------------------------
 st.subheader("Group 23 - RAG Application - RAGBench Dataset")
 
+st.markdown(
+    """
+    <style>
+        /* Make sidebar thinner */
+        [data-testid="stSidebar"] {
+            min-width: 200px;
+            width: 200px;
+        }
+
+        /* Expand main content area */
+        .main {
+            margin-left: 220px; /* Slight offset for sidebar padding */
+        }
+
+        /* Optional: reduce padding in the main container */
+        .block-container {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 #col1, col2, col3 = st.columns([1, 2, 1])
 #with col2:
 #    st.image(image, width=300)
