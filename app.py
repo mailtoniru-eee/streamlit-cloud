@@ -398,5 +398,3 @@ with tab3:
                 st.markdown(f"**Summarization Model:** {config['summarization_model']}")
                 st.markdown(f"**Generator Model:** {config['generator_model']}")
                 st.markdown(f"**Reranking Model:** {config['reranking_model']}")
-                st.markdown("#### Metrics:")
-                st.write(config[metrics].apply(pd.to_numeric, errors='coerce').round(3))
