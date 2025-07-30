@@ -47,6 +47,11 @@ df = df.drop(columns=["input_variable"]).reset_index(drop=True)
 input_vars_df = input_vars_df.reset_index(drop=True)
 df = pd.concat([df, input_vars_df], axis=1)
 
+st.set_page_config(
+    layout="wide",  # This expands the content area to use more horizontal space
+    page_title="RAG"
+)
+
 # --------------------- UI Header ------------------------
 st.subheader("Group 23 - RAG Application - RAGBench Dataset")
 
