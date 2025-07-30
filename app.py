@@ -396,4 +396,4 @@ with tab3:
                 st.markdown(f"**Generator Model:** {config['generator_model']}")
                 st.markdown(f"**Template:** {config['template']}")
                 st.markdown("#### Metrics:")
-                st.write(config[metrics].round(3))
+                st.write(config[metrics].apply(pd.to_numeric, errors='coerce').round(3))
