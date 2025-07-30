@@ -331,32 +331,6 @@ with tab3:
         top_n = 5
         best_configs = grouped.sort_values(by="total_score", ascending=False).head(top_n)
 
-        st.markdown(f"### Top {top_n} Configurations Based on Normalized Score")
-        st.dataframe(
-                    best_configs[group_fields + metrics + ["total_score"]]
-                    .style.format(precision=3),
-                    width=1400  # You can increase or decrease this based on screen size
-                )
-
-        # Optional: Chart for visual comparison
-        # st.markdown("### 📊 Score Comparison")
-        # chart = (
-        #     alt.Chart(best_configs)
-        #     .mark_bar()
-        #     .encode(
-        #         x=alt.X("total_score:Q", title="Total Normalized Score"),
-        #         y=alt.Y("summarization_model:N", title="Summarization Model"),
-        #         color=alt.Color("vector_db:N", title="Vector DB"),
-        #         tooltip=group_fields + metrics + ["total_score"]
-        #     )
-        #     .properties(height=350)
-        # )
-        # st.altair_chart(chart, use_container_width=True)
-        # with st.expander("📋 Score Comparison Table"):
-        #     score_cols = ["total_score"] + metrics
-        #     score_display = best_configs[["summarization_model", "vector_db"] + score_cols].copy()
-        #     score_display = score_display.rename(columns=lambda c: c.replace("_", " ").title())
-        #     st.dataframe(score_display.style.format(precision=3), use_container_width=True)
         st.markdown("### 🏆 Top 5 Configurations Leaderboard")
 
         podium = best_configs.reset_index(drop=True)
@@ -397,4 +371,31 @@ with tab3:
                 st.markdown(f"**Vector DB:** {config['vector_db']}")
                 st.markdown(f"**Summarization Model:** {config['summarization_model']}")
                 st.markdown(f"**Generator Model:** {config['generator_model']}")
-                st.markdown(f"**Reranking Model:** {config['reranking_model']}")
+                st.markdown(f"**Reranking Model:** {config['reranking_model']}")        
+
+        st.markdown(f"### Top {top_n} Configurations Based on Normalized Score")
+        st.dataframe(
+                    best_configs[group_fields + metrics + ["total_score"]]
+                    .style.format(precision=3),
+                    width=1400  # You can increase or decrease this based on screen size
+                )
+
+        # Optional: Chart for visual comparison
+        # st.markdown("### 📊 Score Comparison")
+        # chart = (
+        #     alt.Chart(best_configs)
+        #     .mark_bar()
+        #     .encode(
+        #         x=alt.X("total_score:Q", title="Total Normalized Score"),
+        #         y=alt.Y("summarization_model:N", title="Summarization Model"),
+        #         color=alt.Color("vector_db:N", title="Vector DB"),
+        #         tooltip=group_fields + metrics + ["total_score"]
+        #     )
+        #     .properties(height=350)
+        # )
+        # st.altair_chart(chart, use_container_width=True)
+        # with st.expander("📋 Score Comparison Table"):
+        #     score_cols = ["total_score"] + metrics
+        #     score_display = best_configs[["summarization_model", "vector_db"] + score_cols].copy()
+        #     score_display = score_display.rename(columns=lambda c: c.replace("_", " ").title())
+        #     st.dataframe(score_display.style.format(precision=3), use_container_width=True)
