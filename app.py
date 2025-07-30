@@ -77,8 +77,6 @@ else:
     df["domain"] = df["input_dataset"].map(dataset_domain_map)
     selected_value = st.sidebar.selectbox("Domain", sorted(df["domain"].dropna().unique()), key="domain_sidebar")
 
-input_dataset = st.sidebar.selectbox("Dataset", sorted(df["input_dataset"].dropna().unique()))
-
 st.sidebar.write(f"🔎 Number of rows fetched: {len(df)}")
 
 # ---------------- Tabs ----------------
@@ -88,8 +86,12 @@ tab1, tab2, tab3 = st.tabs(["📊 Dashboard - Individual", "⚖️ Dashboard - C
 with tab1:
     if selection_level == "Dataset":
         df1 = df[df["input_dataset"] == selected_value]
+        selected_dataset = selected_value
     else:
-        df1 = df[df["domain"] == selected_value]
+        # Domain-level: Add one more selectbox in second-level slicers
+        available_datasets = sorted(df[df["domain"] == selected_value]["input_dataset"].dropna().unique())
+        selected_dataset = st.selectbox("Select Dataset in Domain", available_datasets, key="domain_dataset_inside_tab1")
+        df1 = df[df["input_dataset"] == selected_dataset]
 
     # Second-level slicers
     vector_db = st.selectbox("Vector DB", sorted(df1["vector_db"].dropna().unique()))
@@ -227,7 +229,10 @@ with tab2:
 
 
 with tab3:
-    st.header("🏆 Best Configuration for Selected Dataset")
+    if selection_level == "Dataset":
+        st.header(f"🏆 Best Configuration for Dataset: **{selected_value}**")
+    else:
+        st.header(f"🏆 Best Configuration for Domain: **{selected_value}**")
 
     if selection_level == "Dataset":
         df3 = df[df["input_dataset"] == selected_value]
