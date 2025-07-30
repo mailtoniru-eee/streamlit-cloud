@@ -50,9 +50,9 @@ df = pd.concat([df, input_vars_df], axis=1)
 # --------------------- UI Header ------------------------
 st.subheader("Group 23 - RAG Application - RAGBench Dataset")
 
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.image(image, width=300)
+#col1, col2, col3 = st.columns([1, 2, 1])
+#with col2:
+#    st.image(image, width=300)
 
 # ---------------- Sidebar: Shared Filters ----------------
 
@@ -80,7 +80,7 @@ else:
 st.sidebar.write(f"🔎 Number of rows fetched: {len(df)}")
 
 # ---------------- Tabs ----------------
-tab1, tab2, tab3 = st.tabs(["📊 Dashboard - Individual", "⚖️ Dashboard - Comparison", "🏆 Best Config"])
+tab1, tab2, tab3 = st.tabs(["Dashboard - Individual", "Dashboard - Comparison", "Best Config"])
 
 # ---------------- TAB 1 ----------------
 with tab1:
@@ -92,16 +92,22 @@ with tab1:
         available_datasets = sorted(df[df["domain"] == selected_value]["input_dataset"].dropna().unique())
         selected_dataset = st.selectbox("Select Dataset in Domain", available_datasets, key="domain_dataset_inside_tab1")
         df1 = df[df["input_dataset"] == selected_dataset]
+        
+    # Create two columns
+    col1, col2 = st.columns(2)
 
-    # Second-level slicers
-    vector_db = st.selectbox("Vector DB", sorted(df1["vector_db"].dropna().unique()))
-    embedding_model = st.selectbox("Embedding Model", sorted(df1["embedding_model"].dropna().unique()))
-    chunking_type = st.selectbox("Chunking Type", sorted(df1["chunking_type"].dropna().unique()))
-    reranking_model = st.selectbox("Reranking Model", sorted(df1["reranking_model"].dropna().unique()))
-    repacking_strategy = st.selectbox("Repacking Strategy", sorted(df1["repacking_strategy"].dropna().unique()))
-    summarization_model = st.selectbox("Summarization Model", sorted(df1["summarization_model"].dropna().unique()))
-    generator_model = st.selectbox("Generator Model", sorted(df1["generator_model"].dropna().unique()))
-    template = st.selectbox("Template Used", sorted(df1["template"].dropna().unique()))
+    # First column slicers
+    with col1:
+        vector_db = st.selectbox("Vector DB", sorted(df1["vector_db"].dropna().unique()))
+        chunking_type = st.selectbox("Chunking Type", sorted(df1["chunking_type"].dropna().unique()))
+        repacking_strategy = st.selectbox("Repacking Strategy", sorted(df1["repacking_strategy"].dropna().unique()))
+        generator_model = st.selectbox("Generator Model", sorted(df1["generator_model"].dropna().unique()))
+        
+    with col2:
+        embedding_model = st.selectbox("Embedding Model", sorted(df1["embedding_model"].dropna().unique()))
+        reranking_model = st.selectbox("Reranking Model", sorted(df1["reranking_model"].dropna().unique()))
+        summarization_model = st.selectbox("Summarization Model", sorted(df1["summarization_model"].dropna().unique()))
+        template = st.selectbox("Template Used", sorted(df1["template"].dropna().unique()))
 
     # Apply filters
     filtered_df = df1[
@@ -127,7 +133,7 @@ with tab1:
         "Average": list(metric_averages.values())
     })
 
-    st.subheader("📊 Metric Averages for Selected Configuration")
+    st.subheader("Metric Averages for Selected Configuration")
 
     chart = (
         alt.Chart(avg_df)
@@ -151,17 +157,21 @@ with tab2:
     else:
         df2 = df[df["domain"] == selected_value]
 
-    st.header("📊 Metric Comparison Across Configurations")
-
-    vector_dbs = st.multiselect("Vector DB", df2["vector_db"].dropna().unique())
-    embedding_models = st.multiselect("Embedding Model", df2["embedding_model"].dropna().unique())
-    chunking_types = st.multiselect("Chunking Type", df2["chunking_type"].dropna().unique())
-    reranking_models = st.multiselect("Reranking Model", df2["reranking_model"].dropna().unique())
-    repacking_strategies = st.multiselect("Repacking Strategy", df2["repacking_strategy"].dropna().unique())
-    summarization_models = st.multiselect("Summarization Model", df2["summarization_model"].dropna().unique())
-    generator_models = st.multiselect("Generator Model", df2["generator_model"].dropna().unique())
-    templates = st.multiselect("Templates Used", df2["template"].dropna().unique())
-
+    st.header("Metric Comparison Across Configurations")
+    
+    col1, col2 = st.columns(2)
+    
+    # First column slicers
+    with col1:
+        vector_dbs = st.multiselect("Vector DB", df2["vector_db"].dropna().unique())
+        chunking_types = st.multiselect("Chunking Type", df2["chunking_type"].dropna().unique())
+        repacking_strategies = st.multiselect("Repacking Strategy", df2["repacking_strategy"].dropna().unique())
+        generator_models = st.multiselect("Generator Model", df2["generator_model"].dropna().unique())
+    with col2:
+        embedding_models = st.multiselect("Embedding Model", df2["embedding_model"].dropna().unique())
+        reranking_models = st.multiselect("Reranking Model", df2["reranking_model"].dropna().unique())
+        summarization_models = st.multiselect("Summarization Model", df2["summarization_model"].dropna().unique())
+        templates = st.multiselect("Templates Used", df2["template"].dropna().unique())
     # Apply filters
     filtered_df = df2.copy()
 
@@ -230,9 +240,9 @@ with tab2:
 
 with tab3:
     if selection_level == "Dataset":
-        st.header(f"🏆 Best Configuration for Dataset: **{selected_value}**")
+        st.header(f"Best Configuration for Dataset: **{selected_value}**")
     else:
-        st.header(f"🏆 Best Configuration for Domain: **{selected_value}**")
+        st.header(f"Best Configuration for Domain: **{selected_value}**")
 
     if selection_level == "Dataset":
         df3 = df[df["input_dataset"] == selected_value]
