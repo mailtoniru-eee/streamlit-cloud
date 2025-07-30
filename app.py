@@ -194,7 +194,9 @@ with tab1:
         .properties(height=400, width=800)
     )
 
-    st.altair_chart(chart, use_container_width=False)
+    col1, col2, col3 = st.columns([1, 6, 1])
+    with col2:
+        st.altair_chart(chart, use_container_width=False)
 
 # ---------------- TAB 2 ----------------
 with tab2:
