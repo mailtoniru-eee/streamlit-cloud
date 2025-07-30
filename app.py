@@ -124,16 +124,32 @@ with tab1:
 
     # First column slicers
     with col1:
-        vector_db = st.selectbox("Vector DB", sorted(df1["vector_db"].dropna().unique()))
-        chunking_type = st.selectbox("Chunking Type", sorted(df1["chunking_type"].dropna().unique()))
-        repacking_strategy = st.selectbox("Repacking Strategy", sorted(df1["repacking_strategy"].dropna().unique()))
-        generator_model = st.selectbox("Generator Model", sorted(df1["generator_model"].dropna().unique()))
+        # vector_db = st.selectbox("Vector DB", sorted(df1["vector_db"].dropna().unique()))
+        vector_db_options = sorted(df1["vector_db"].dropna().unique())
+        vector_db = st.selectbox("Vector DB", vector_db_options, index=0 if vector_db_options else None)
+        chunking_type_options = sorted(df1["chunking_type"].dropna().unique())
+        # chunking_type = st.selectbox("Chunking Type", sorted(df1["chunking_type"].dropna().unique()))
+        chunking_type = st.selectbox("Chunking Type", chunking_type_options, index=0 if chunking_type_options else None)
+        repacking_strategy_options = sorted(df1["repacking_strategy"].dropna().unique())
+        repacking_strategy = st.selectbox("Repacking Strategy", repacking_strategy_options, index=0 if repacking_strategy_options else None)
+        # repacking_strategy = st.selectbox("Repacking Strategy", sorted(df1["repacking_strategy"].dropna().unique()))
+        # generator_model = st.selectbox("Generator Model", sorted(df1["generator_model"].dropna().unique()))
+        generator_model_options = sorted(df1["generator_model"].dropna().unique())
+        generator_model = st.selectbox("Generator Model", generator_model_options, index=0 if generator_model_options else None)
         
     with col2:
-        embedding_model = st.selectbox("Embedding Model", sorted(df1["embedding_model"].dropna().unique()))
-        reranking_model = st.selectbox("Reranking Model", sorted(df1["reranking_model"].dropna().unique()))
-        summarization_model = st.selectbox("Summarization Model", sorted(df1["summarization_model"].dropna().unique()))
-        template = st.selectbox("Template Used", sorted(df1["template"].dropna().unique()))
+        embedding_model_options = sorted(df1["embedding_model"].dropna().unique())
+        embedding_model = st.selectbox("Embedding Model", embedding_model_options, index=0 if embedding_model_options else None)
+        # embedding_model = st.selectbox("Embedding Model", sorted(df1["embedding_model"].dropna().unique()))
+        # reranking_model = st.selectbox("Reranking Model", sorted(df1["reranking_model"].dropna().unique()))
+        reranking_model_options = sorted(df1["reranking_model"].dropna().unique())
+        reranking_model = st.selectbox("Reranking Model", reranking_model_options, index=0 if reranking_model_options else None)
+        # summarization_model = st.selectbox("Summarization Model", sorted(df1["summarization_model"].dropna().unique()))
+        summarization_model_options = sorted(df1["summarization_model"].dropna().unique())
+        summarization_model = st.selectbox("Summarization Model", summarization_model_options, index=0 if summarization_model_options else None)
+        # template = st.selectbox("Template Used", sorted(df1["template"].dropna().unique()))
+        template_options = sorted(df1["template"].dropna().unique())
+        template = st.selectbox("Template Used", template_options, index=0 if template_options else None)
 
     # Apply filters
     filtered_df = df1[
