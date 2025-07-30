@@ -317,10 +317,11 @@ with tab3:
 
         st.markdown(f"### 🥇 Top {top_n} Configurations Based on Normalized Score")
         st.dataframe(
-            best_configs[group_fields + metrics + ["total_score"]]
-            .style.format(precision=3),
-            use_container_width=True
-        )
+                    best_configs[group_fields + metrics + ["total_score"]]
+                    .style.format(precision=3),
+                    height=300,
+                    width=1400  # You can increase or decrease this based on screen size
+                )
 
         # Optional: Chart for visual comparison
         st.markdown("### 📊 Score Comparison")
