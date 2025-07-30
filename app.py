@@ -395,11 +395,8 @@ with tab3:
             config = podium.iloc[idx]
             with st.expander(f"#{idx+1} - Score: {config['total_score']:.3f}"):
                 st.markdown(f"**Vector DB:** {config['vector_db']}")
-                st.markdown(f"**Embedding Model:** {config['embedding_model']}")
-                st.markdown(f"**Chunking Type:** {config['chunking_type']}")
-                st.markdown(f"**Reranking Model:** {config['reranking_model']}")
                 st.markdown(f"**Summarization Model:** {config['summarization_model']}")
                 st.markdown(f"**Generator Model:** {config['generator_model']}")
-                st.markdown(f"**Template:** {config['template']}")
+                st.markdown(f"**Reranking Model:** {config['reranking_model']}")
                 st.markdown("#### Metrics:")
                 st.write(config[metrics].apply(pd.to_numeric, errors='coerce').round(3))
