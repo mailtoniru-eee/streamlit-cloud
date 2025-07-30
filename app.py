@@ -370,6 +370,7 @@ with tab3:
             st.markdown(f"**Vector DB:** {podium.loc[0, 'vector_db']}")
             st.markdown(f"**Summarization:** {podium.loc[0, 'summarization_model']}")
             st.markdown(f"**Generator:** {podium.loc[0, 'generator_model']}")
+            st.markdown(f"**Reranking Model:** {podium.loc[0, 'reranking_model']}")
         
         with col2:
             st.markdown("### 🥈 2nd")
@@ -377,6 +378,7 @@ with tab3:
             st.markdown(f"**Vector DB:** {podium.loc[1, 'vector_db']}")
             st.markdown(f"**Summarization:** {podium.loc[1, 'summarization_model']}")
             st.markdown(f"**Generator:** {podium.loc[1, 'generator_model']}")
+            st.markdown(f"**Reranking Model:** {podium.loc[1, 'reranking_model']}")
         
         with col3:
             st.markdown("### 🥉 3rd")
@@ -384,6 +386,7 @@ with tab3:
             st.markdown(f"**Vector DB:** {podium.loc[2, 'vector_db']}")
             st.markdown(f"**Summarization:** {podium.loc[2, 'summarization_model']}")
             st.markdown(f"**Generator:** {podium.loc[2, 'generator_model']}")
+            st.markdown(f"**Reranking Model:** {podium.loc[2, 'reranking_model']}")
         
         # 4th and 5th below
         st.markdown("### 🎖️ Honorable Mentions")
