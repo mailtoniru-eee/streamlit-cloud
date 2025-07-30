@@ -319,7 +319,6 @@ with tab3:
         st.dataframe(
                     best_configs[group_fields + metrics + ["total_score"]]
                     .style.format(precision=3),
-                    height=300,
                     width=1400  # You can increase or decrease this based on screen size
                 )
 
